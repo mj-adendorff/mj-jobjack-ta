@@ -10,6 +10,7 @@ My technical assesment for JobJack. The date of the assesment ran between 29/30 
 
 ## Repo Directory Structure (WIP)
 
+```
 .
 ├── api
 │ ├── src
@@ -19,6 +20,7 @@ My technical assesment for JobJack. The date of the assesment ran between 29/30 
 │ └── tsconfig.json
 ├── client
 └── README.md
+```
 
 ## NodeJS API (WIP)
 
