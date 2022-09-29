@@ -16,9 +16,9 @@ const PORT: number = 4200;
 const HOST: string = "localhost";
 
 /* Globals */
-import fs from "node:fs";
 import cors from "cors";
 import express from "express";
+import * as files from "./files";
 
 /* API services */
 const app = express();
@@ -42,6 +42,16 @@ interface File {
 
 /***   MAIN LOOP   ************************************************************/
 
+app.listen(PORT, HOST, () => {
+	console.log(`Server running on http://${HOST}:${PORT}`);
+});
+
 /***   API ENDPOINTS  *********************************************************/
+
+app.get("/", (_req, res) => {
+	files.getDirectoryListing("/etc").then((dirStruct) => {
+		res.status(200).json(dirStruct);
+	});
+});
 
 /***   EOF   ******************************************************************/
