@@ -15,17 +15,22 @@ import fs from "node:fs";
 
 /***   TYPE DEFINITIONS   *****************************************************/
 
-export interface File {
+export type Extension = {
+	extension: string;
+	commonType: string;
+};
+
+export type File = {
 	fileName: string;
 	fullPath: string;
 	dateCreated: Date;
 	permissions: number;
 	group: number;
 	user: number;
+	fileType: Extension;
 	isDirectory: boolean;
-	fileType: string;
 	size: number;
-}
+};
 
 export type Listing = Array<File>;
 
@@ -49,6 +54,19 @@ function getPermissions(mode: number): string {
 	return "WIP";
 }
 
+/**
+ * Retruns the extension of a file if it exits
+ * and
+ * TODO gives its type if it is a common type
+ */
+function getExtension(fileName: string): Extension {
+	let ext = fileName.match(/(\.\w{2,4})$/g);
+	let returnable: Extension = {
+		extension: ext ? ext[0] : "",
+		commonType: "WIP",
+	};
+	return returnable;
+}
 /**
  * Function that gets the directory listing of a given directory
  * retuns promise.
@@ -74,7 +92,7 @@ export function getDirectoryListing(directory: string): Promise<Listing> {
 					group: stats.gid,
 					user: stats.uid,
 					isDirectory: stats.isDirectory(),
-					fileType: "none",
+					fileType: getExtension(file),
 					size: getKiloBytesFromBytes(stats.size),
 				};
 				listing.push(newFile);
