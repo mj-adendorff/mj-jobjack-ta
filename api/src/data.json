@@ -1,0 +1,25 @@
+{
+	"commonFileTypes": {
+		".txt": "Text File",
+		".pdf": "Portable document format",
+		".exe": "Executable",
+		".bat": "Batch file",
+		".avi": "Multimedia",
+		".png": "PNG image",
+		".jpeg": "JPEG image",
+		".jpg": "JPG image",
+		".docx": "Word document",
+		".pptx": "Powerpoint document",
+		".json": "Javascript object notation file",
+		".java": "Java source",
+		".class": "Java bytecode",
+		".html": "HTML source",
+		".css": "CSS source",
+		".js": "Javascript source",
+		".ts": "Typescript source",
+		".asm": "Assembly source",
+		".md": "Markdown file",
+		".c": "C source",
+		".o": "Object file"
+	}
+}

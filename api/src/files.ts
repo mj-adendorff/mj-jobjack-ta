@@ -12,6 +12,8 @@
 
 /* Imports */
 import fs from "node:fs";
+import path from "node:path";
+import { commonFileTypes } from "./data.json";
 
 /***   TYPE DEFINITIONS   *****************************************************/
 
@@ -25,8 +27,6 @@ export type File = {
 	fullPath: string;
 	dateCreated: Date;
 	permissions: number;
-	group: number;
-	user: number;
 	fileType: Extension;
 	isDirectory: boolean;
 	size: number;
@@ -39,9 +39,9 @@ export type Listing = Array<File>;
 /**
  * Function that converts bytes to KiloBytes (2 ** 10).
  */
-function getKiloBytesFromBytes(byteAmount: number): number {
-	const bytesInKB = Math.pow(2, 10);
-	return Math.ceil(byteAmount / bytesInKB);
+function getKilobytesFromBytes(byteAmount: number): number {
+	const bytesInKilobyteAmount = Math.pow(2, 10);
+	return Math.ceil(byteAmount / bytesInKilobyteAmount);
 }
 
 /**
@@ -57,16 +57,17 @@ function getPermissions(mode: number): string {
 /**
  * Retruns the extension of a file if it exits
  * and
- * TODO gives its type if it is a common type
  */
 function getExtension(fileName: string): Extension {
-	let ext = fileName.match(/(\.\w{2,4})$/g);
+	let ext: string = path.extname(fileName);
+	let commonType: string = commonFileTypes[ext as keyof typeof commonFileTypes];
 	let returnable: Extension = {
-		extension: ext ? ext[0] : "",
-		commonType: "WIP",
+		extension: ext,
+		commonType: commonType ? commonType : "unknown",
 	};
 	return returnable;
 }
+
 /**
  * Function that gets the directory listing of a given directory
  * retuns promise.
@@ -78,23 +79,22 @@ export function getDirectoryListing(directory: string): Promise<Listing> {
 		// Read directory contents
 		fs.readdir(directory, (error, files) => {
 			if (error) {
-				console.log("error reading files");
 				reject(listing);
 			}
-			// Loop through files in directory
+			// Loop through items in directory
 			files.forEach((file) => {
-				let stats = fs.statSync(`${directory}/${file}`);
+				let filePath = `${directory}/${file}`;
+				let stats = fs.statSync(filePath);
 				let newFile: File = {
 					fileName: file,
-					fullPath: `${directory}/${file}`,
+					fullPath: filePath,
 					dateCreated: stats.birthtime,
 					permissions: stats.mode,
-					group: stats.gid,
-					user: stats.uid,
 					isDirectory: stats.isDirectory(),
 					fileType: getExtension(file),
-					size: getKiloBytesFromBytes(stats.size),
+					size: getKilobytesFromBytes(stats.size),
 				};
+				// append file info to listing
 				listing.push(newFile);
 			});
 			resolve(listing);
@@ -102,11 +102,5 @@ export function getDirectoryListing(directory: string): Promise<Listing> {
 	});
 	return returnable;
 }
-
-/***   TEST FUNCTION   ********************************************************/
-
-// getDirectoryListing("/etc").then((value) => {
-// 	console.table(value);
-// });
 
 /***   EOF   ******************************************************************/

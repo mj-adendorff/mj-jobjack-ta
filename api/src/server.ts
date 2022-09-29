@@ -49,7 +49,7 @@ app.listen(PORT, HOST, () => {
 /***   API ENDPOINTS  *********************************************************/
 
 app.get("/", (_req, res) => {
-	files.getDirectoryListing("/etc").then((dirStruct) => {
+	files.getDirectoryListing("/Users/mjadendorff/").then((dirStruct) => {
 		res.status(200).json(dirStruct);
 	});
 });
