@@ -75,17 +75,14 @@ app.post("/stream", (req, res) => {
 			res.status(500).json({ error: "could not read directory" });
 			return;
 		}
-		// structure data as JSON array
+		// start JSON array structure
 		res.write("[");
 		let count = 0;
 		// Loop through items in directory
 		files.forEach((file) => {
-			if (count != 0) {
-				res.write(",");
-			}
-			count++;
-			let filePath = `${DIR}/${file}`;
 			try {
+				// Query the file
+				let filePath = `${DIR}/${file}`;
 				let stats = fs.statSync(filePath);
 				let newFile: File = {
 					fileName: file,
@@ -96,7 +93,12 @@ app.post("/stream", (req, res) => {
 					fileType: getExtension(file),
 					size: getKilobytesFromBytes(stats.size),
 				};
-				// append file info to listing
+				// Strucutre JSON data
+				if (count != 0) {
+					res.write(",");
+				}
+				count++;
+				// send out to stream
 				res.status(200).write(JSON.stringify(newFile));
 			} catch {
 				console.warn(`error reading file ${file}, ignoring...`);
