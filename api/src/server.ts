@@ -56,6 +56,14 @@ app.listen(PORT, HOST, () => {
 /***   API ENDPOINTS (REST) ***************************************************/
 
 /**
+ * * GET request
+ * Query if the API is online
+ */
+app.get("/status", (_req, res) => {
+	res.status(200).json({ status: "online" });
+});
+
+/**
  * * POST request
  * This endpoint streams data
  * Queries the path found in the body (if it exists) on the local filesystem
