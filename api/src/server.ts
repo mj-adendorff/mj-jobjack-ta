@@ -30,12 +30,12 @@ app.use(cors());
 
 /***   TYPE DEFINITIONS   *****************************************************/
 
-export type Extension = {
+type Extension = {
 	extension: string;
 	commonType: string;
 };
 
-export type File = {
+type File = {
 	fileName: string;
 	fullPath: string;
 	dateCreated: Date;
@@ -45,7 +45,7 @@ export type File = {
 	size: number;
 };
 
-export type Listing = Array<File>;
+type Listing = Array<File>;
 
 /***   MAIN LOOP   ************************************************************/
 
