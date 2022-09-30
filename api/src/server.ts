@@ -143,6 +143,7 @@ function getKilobytesFromBytes(byteAmount: number): number {
 /**
  * Function to get permissions from the stats.mode number
  * ref: https://github.com/nodejs/node-v0.x-archive/issues/3045
+ * only UNIX file permission codes
  */
 function getPermissions(mode: number): string {
 	const permString = "0" + (mode & parseInt("777", 8)).toString(8);
