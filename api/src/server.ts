@@ -73,6 +73,7 @@ app.post("/stream", (req, res) => {
 	fs.readdir(DIR, (error, files) => {
 		if (error) {
 			res.status(500).json({ error: "could not read directory/file" });
+			return;
 		}
 		// structure data as JSON array
 		res.write("[");
@@ -122,6 +123,7 @@ app.post("/listing", (req, res) => {
 	fs.readdir(DIR, (error, files) => {
 		if (error) {
 			res.status(500).json({ error: "could not read directory/file" });
+			return;
 		}
 		// Loop through items in directory
 		files.forEach((file) => {
