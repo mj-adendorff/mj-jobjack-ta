@@ -64,8 +64,15 @@ app.get("/stream", (req, res) => {
 		if (error) {
 			res.status(500).json({ error: "could not read directory/file" });
 		}
+		// structure data as JSON array
+		res.write("[");
+		let count = 0;
 		// Loop through items in directory
 		files.forEach((file) => {
+			if (count != 0) {
+				res.write(",");
+			}
+			count++;
 			let filePath = `${DIR}/${file}`;
 			let stats = fs.statSync(filePath);
 			let newFile: File = {
@@ -80,11 +87,15 @@ app.get("/stream", (req, res) => {
 			// append file info to listing
 			res.status(200).write(JSON.stringify(newFile));
 		});
+		// close the stream and JSON data structure
+		res.write("]");
 		res.status(200).end();
 	});
 });
 
-// Full listing
+/**
+ * POST request
+ */
 app.post("/listing", (req, res) => {
 	// Get DIRECTORY PATH from POST body
 	let DIR: string;
@@ -132,7 +143,6 @@ function getKilobytesFromBytes(byteAmount: number): number {
 /**
  * Function to get permissions from the stats.mode number
  * ref: https://github.com/nodejs/node-v0.x-archive/issues/3045
- * TODO finish this function
  */
 function getPermissions(mode: number): string {
 	const permString = "0" + (mode & parseInt("777", 8)).toString(8);
