@@ -1,11 +1,11 @@
 /*******************************************************************************
- * SERVER.TS FILE
+ * SERVER.TS
  * ------------
  * NodeJS API which returns directory listing from given path on API's host
  * system.
  * ------------
- * Author: MJ Adendorff
- * Date: 29 September 2022
+ * @author: MJ Adendorff
+ * @version 1.0.0
  * ------------
  ******************************************************************************/
 
@@ -53,13 +53,23 @@ app.listen(PORT, HOST, () => {
 	console.log(`Server running on http://${HOST}:${PORT}`);
 });
 
-/***   API ENDPOINTS  *********************************************************/
+/***   API ENDPOINTS (REST) ***************************************************/
 
-// Test
-app.get("/stream", (req, res) => {
-	// Get directory listing and send it
-	//let dataStream = getDirectoryListingStream("/etc");
-	let DIR = "/etc";
+/**
+ * * POST request
+ * This endpoint streams data
+ * Queries the path found in the body (if it exists) on the local filesystem
+ * and returns the directory listing if it's a directory.
+ */
+app.post("/stream", (req, res) => {
+	// Get DIRECTORY PATH from POST body
+	let DIR: string;
+	if (req.body.path) {
+		DIR = req.body.path;
+	} else {
+		DIR = "/";
+	}
+	// Read directory
 	fs.readdir(DIR, (error, files) => {
 		if (error) {
 			res.status(500).json({ error: "could not read directory/file" });
@@ -94,7 +104,10 @@ app.get("/stream", (req, res) => {
 });
 
 /**
- * POST request
+ * * POST request
+ * This endpoint doesn't stream data
+ * Queries the path found in the body (if it exists) on the local filesystem
+ * and returns the directory listing if it's a directory.
  */
 app.post("/listing", (req, res) => {
 	// Get DIRECTORY PATH from POST body
@@ -102,7 +115,7 @@ app.post("/listing", (req, res) => {
 	if (req.body.path) {
 		DIR = req.body.path;
 	} else {
-		DIR = "/etc";
+		DIR = "/";
 	}
 	let listing: Listing = [];
 	// Read directory contents
@@ -133,7 +146,9 @@ app.post("/listing", (req, res) => {
 /***   FUNCTIONS   ************************************************************/
 
 /**
- * Function that converts bytes to KiloBytes (2 ** 10).
+ * Function that converts Bytes (B) to KiloBytes (KB).
+ * @param {number} byteAmount - amount of Bytes
+ * @returns {number} - the amount of KB
  */
 function getKilobytesFromBytes(byteAmount: number): number {
 	const bytesInKilobyteAmount = Math.pow(2, 10);
@@ -142,8 +157,9 @@ function getKilobytesFromBytes(byteAmount: number): number {
 
 /**
  * Function to get permissions from the stats.mode number
- * ref: https://github.com/nodejs/node-v0.x-archive/issues/3045
- * only UNIX file permission codes
+ * credit: https://github.com/nodejs/node-v0.x-archive/issues/3045
+ * @param {number} mode - the file protections number
+ * @returns {string} - UNIX file permissions string
  */
 function getPermissions(mode: number): string {
 	const permString = "0" + (mode & parseInt("777", 8)).toString(8);
@@ -151,8 +167,10 @@ function getPermissions(mode: number): string {
 }
 
 /**
- * Retruns the extension of a file if it exits
- * and
+ * Retruns the extension of a file if it exits and it's common file type
+ * if it's specified in the data.json file.
+ * @param {string} fileName - the file name
+ * @returns {Extension} - Object representing the extension and type.
  */
 function getExtension(fileName: string): Extension {
 	let ext: string = path.extname(fileName);

@@ -27,13 +27,15 @@ My technical assesment for JobJack. The date of the assesment ran between 29/30 
 
 ```
 .
-├── api
+├── api              # NodeJS API
 │ ├── src
+│ │ ├── data.json
 │ │ └── server.ts
-│ ├── package-lock.json
-│ ├── package.json
-│ └── tsconfig.json
-├── client
+│ └── ...
+├── client           # Angular 8+ Client
+│ ├── src
+│ │ ├── ...
+│ └── ...
 └── README.md
 ```
 
