@@ -4,7 +4,10 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"test": "jest build/"
+		"build": "npx tsc",
+		"start": "npx tsc && node build/server.js",
+		"dev": "node build/server.js",
+		"test": "echo \"\n!!\tAPI MUST BE RUNNING\t!!\n\" && jest build/"
 	},
 	"repository": {
 		"type": "git",
