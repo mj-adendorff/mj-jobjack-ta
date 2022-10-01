@@ -1,0 +1,35 @@
+@mobile: ~"screen and (max-width: 900px)";
+@tablet: ~"screen and (min-width: 900px) and (max-width: 1200px)";
+@desktop: ~"screen and (min-width: 1200px)";
+
+.main {
+  display: flex;
+  width: 100%;
+  min-height: 80vh;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  .table-container {
+    display: flex;
+    flex-direction: column;
+    @media @mobile {
+      width: 100%;
+    }
+    @media @tablet {
+      width: 90%;
+    }
+    @media @desktop {
+      width: 80%;
+    }
+  }
+}
+
+.mat-row:hover .mat-cell {
+  border-color: currentColor;
+  cursor: pointer;
+}
+
+.mat-row .mat-cell {
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+}

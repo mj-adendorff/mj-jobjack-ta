@@ -10,6 +10,10 @@
 
 /***   CONSTANTS AND GLOBALS   ************************************************/
 
+/* Constants */
+const PORT: number = 5200;
+const HOST: string = "localhost";
+
 /* Globals */
 import { expect, test } from "@jest/globals";
 import axios from "axios";
@@ -47,7 +51,7 @@ function getStatus(): Promise<Status> {
 	let returnable = new Promise<Status>((resolve, reject) => {
 		axios({
 			method: "get",
-			url: "http://localhost:4200/status",
+			url: `http://${HOST}:${PORT}/status`,
 		})
 			.then((result) => {
 				resolve(result.data);
@@ -68,7 +72,7 @@ function getDirectoryListing(directory: string): Promise<Listing> {
 	let returnable = new Promise<Listing>((resolve, reject) => {
 		axios({
 			method: "post",
-			url: "http://localhost:4200/stream",
+			url: `http://${HOST}:${PORT}/stream`,
 			data: {
 				path: directory,
 			},
@@ -85,12 +89,14 @@ function getDirectoryListing(directory: string): Promise<Listing> {
 
 /***   TESTS   ****************************************************************/
 
+// Control test
 test("Test API status", () => {
 	getStatus().then((data) => {
 		expect(data.status).toBe("online");
 	});
 });
 
+// Testing build directory
 test("check current directory", () => {
 	getDirectoryListing(".").then((data) => {
 		let names = ["data.json", "server.test.js", "server.js"];

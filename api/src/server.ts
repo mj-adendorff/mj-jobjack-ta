@@ -12,7 +12,7 @@
 /***   CONSTANTS AND GLOBALS   ************************************************/
 
 /* Constants */
-const PORT: number = 4200;
+const PORT: number = 5200;
 const HOST: string = "localhost";
 
 /* Globals */
