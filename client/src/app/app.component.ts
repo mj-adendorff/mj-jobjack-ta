@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, ViewChild, OnDestroy } from '@angular/core';
 import { AppService } from './app.service';
+import { faFileLines as faFile, faFolderClosed as faFolder } from '@fortawesome/free-solid-svg-icons';
 
 type Extension = {
   extension: string;
@@ -25,24 +26,6 @@ const fileData: File[] = [
     size: 10,
     isDirectory: false,
   },
-  {
-    fileName: 'randomfile.txt',
-    fullPath: './randomfile.txt',
-    dateCreated: new Date(),
-    permissions: '0777',
-    fileType: { commonType: 'Text file', extension: '.txt' },
-    size: 10,
-    isDirectory: false,
-  },
-  {
-    fileName: 'randomfile.txt',
-    fullPath: './randomfile.txt',
-    dateCreated: new Date(),
-    permissions: '0777',
-    fileType: { commonType: 'Text file', extension: '.txt' },
-    size: 10,
-    isDirectory: false,
-  },
 ];
 
 @Component({
@@ -51,6 +34,8 @@ const fileData: File[] = [
   styleUrls: ['./app.component.less'],
 })
 export class AppComponent {
+  faFile = faFile;
+  faFolder = faFolder;
   files: File[] = fileData;
   status = 'offline';
   statusColor = 'red';
@@ -65,9 +50,31 @@ export class AppComponent {
         this.statusColor = 'lightgreen';
       }
     });
-    this.appService.getDirectoryListing('/etc').subscribe((data: any) => {
+    this.appService.getDirectoryListing('/Users/mjadendorff/Desktop').subscribe((data: any) => {
       this.files = data;
-      this.directory = "/etc";
+      this.directory = "/Users/mjadendorff/Desktop";
+    });
+  }
+
+  seek(file: File) {
+    if (file.isDirectory) {
+      this.changeDirectoryListing(file.fullPath);
+    } else {
+      alert("file to be opened?");
+    }
+  }
+
+  getIcon(file: File) {
+    if (file.isDirectory) {
+      return this.faFolder;
+    }
+    return this.faFile;
+  }
+
+  changeDirectoryListing(directory: string) {
+    this.appService.getDirectoryListing(directory).subscribe((data: any) => {
+      this.files = data;
+      this.directory = directory;
     });
   }
 }
