@@ -2,6 +2,9 @@
 	"commonFileTypes": {
 		".txt": "Text File",
 		".pdf": "Portable document format",
+		".conf": "Config File",
+		".db": "Generic database file",
+		".rc": "Resource file",
 		".exe": "Executable",
 		".bat": "Batch file",
 		".avi": "Multimedia",

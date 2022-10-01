@@ -51,14 +51,23 @@ const fileData: File[] = [
   styleUrls: ['./app.component.less'],
 })
 export class AppComponent {
-  files = fileData;
+  files: File[] = fileData;
   status = 'offline';
+  statusColor = 'red';
+  directory = "none";
+  test(name: string) {
+    console.log(name);
+  }
   constructor(private appService: AppService) {
     this.appService.getStatus().subscribe((data: any) => {
       this.status = data.status;
+      if (this.status === 'online') {
+        this.statusColor = 'lightgreen';
+      }
     });
-    this.appService.getDirectoryListing('.').subscribe((data: any) => {
+    this.appService.getDirectoryListing('/etc').subscribe((data: any) => {
       this.files = data;
+      this.directory = "/etc";
     });
   }
 }

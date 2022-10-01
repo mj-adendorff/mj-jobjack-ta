@@ -1,25 +1,32 @@
 <div class="main">
-  <h1>{{ status }}</h1>
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th scope="col">File Name</th>
-        <th scope="col">File Path</th>
-        <th scope="col">File Date</th>
-        <th scope="col">File Perms</th>
-        <th scope="col">File Type</th>
-        <th scope="col">File Size</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let file of files">
-        <th scope="row">{{ file.fileName }}</th>
-        <td>{{ file.fullPath }}</td>
-        <td>{{ file.dateCreated | date }}</td>
-        <td>{{ file.permissions }}</td>
-        <td>{{ file.fileType.commonType }}</td>
-        <td>{{ file.size | number }}</td>
-      </tr>
-    </tbody>
-  </table>
+  <!--Forms and Info-->
+  <div class="info-container">
+      <p>API Status: <span style="color: {{ statusColor }}">{{ status }}</span></p>
+      <p>Current Directory: <span style="color: yellow">{{directory}}</span></p>
+  </div>
+  <!--Table-->
+  <div class="table-container">
+    <table class="table table-striped table-dark table-hover table-responsive">
+      <thead>
+        <tr>
+          <th scope="col">File Name</th>
+          <th scope="col">File Date</th>
+          <th scope="col">File Perms</th>
+          <th scope="col">File Type</th>
+          <th scope="col">File Size</th>
+          <th scope="col">File Path</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let file of files" (click)="test(file.fileName)">
+          <th scope="row">{{ file.fileName }}</th>
+          <td>{{ file.dateCreated | date }}</td>
+          <td>{{ file.permissions }}</td>
+          <td>{{ file.fileType.commonType }}</td>
+          <td>{{ file.size | number }} KB</td>
+          <td>{{ file.fullPath }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

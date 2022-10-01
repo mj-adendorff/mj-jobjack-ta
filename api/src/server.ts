@@ -98,7 +98,7 @@ app.post("/stream", (req, res) => {
 					dateCreated: stats.birthtime,
 					permissions: getPermissions(stats.mode),
 					isDirectory: stats.isDirectory(),
-					fileType: getExtension(file),
+					fileType: getExtension(file, stats.isDirectory()),
 					size: getKilobytesFromBytes(stats.size),
 				};
 				// Strucutre JSON data
@@ -147,9 +147,12 @@ function getPermissions(mode: number): string {
  * @param {string} fileName - the file name
  * @returns {Extension} - Object representing the extension and type.
  */
-function getExtension(fileName: string): Extension {
+function getExtension(fileName: string, isDirectory: boolean): Extension {
 	let ext: string = path.extname(fileName);
 	let commonType: string = commonFileTypes[ext as keyof typeof commonFileTypes];
+	if (isDirectory) {
+		commonType = "Directory/Folder";
+	}
 	let returnable: Extension = {
 		extension: ext,
 		commonType: commonType ? commonType : "unknown",
