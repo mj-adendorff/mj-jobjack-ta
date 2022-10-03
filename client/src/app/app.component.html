@@ -8,8 +8,12 @@
       <fa-icon class="button" (click)="goForward()" [icon]="faArrowRight"></fa-icon>
     </div>
     <div class="other">
-      <p>Current Directory: <span style="color: yellow">{{directory}}</span></p>
-      <p>API Status: <span style="color: {{ statusColor }}">{{ status.toUpperCase() }}</span></p>
+      <div>Current Directory: <span style="color: yellow">{{directory}}</span></div>
+      <div>API Status: 
+        <span [ngClass]="{'success': status === 'online', 'error': status !== 'online' }">
+          {{ status.toUpperCase() }}
+        </span>
+      </div>
     </div>
   </div>
   <!--Table-->
@@ -23,7 +27,7 @@
           <th scope="col">File Perms</th>
           <th scope="col">File Type</th>
           <th scope="col">File Size</th>
-          <th scope="col">File Path</th>
+          <th scope="col">File Path</th> 
         </tr>
       </thead>
       <tbody>

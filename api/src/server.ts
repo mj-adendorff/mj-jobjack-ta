@@ -121,20 +121,26 @@ app.post("/stream", (req, res) => {
 /**
  * * POST request
  * This endpoint streams data
- * Queries the file for download
+ * Queries the file for viewing
  */
-app.post("/downlaod", (req, res) => {
+app.post("/view", (req, res) => {
 	// Get FILE PATH from POST body
 	if (req.body.path) {
 		let FILE = req.body.path;
-		try {
-			let reader = fs.createReadStream(FILE);
-			reader.on('data', (dataChunk) => {
-				res.write(dataChunk);
-			})
-			res.end();
-		} catch {
-			res.sendStatus(500);
+		let stats = fs.statSync(FILE);
+		let fileType = getExtension(FILE, stats.isDirectory());
+		if (fileType.extension == ".txt") {
+			try {
+				let reader = fs.createReadStream(FILE);
+				reader.on('data', (dataChunk) => {
+					res.write(dataChunk);
+				})
+				res.end();
+			} catch {
+				res.sendStatus(500);
+			}
+		} else {
+			res.sendStatus(400);
 		}
 	} else {
 		res.sendStatus(400);

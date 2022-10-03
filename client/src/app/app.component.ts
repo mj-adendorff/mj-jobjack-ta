@@ -17,17 +17,7 @@ type File = {
   isDirectory: boolean;
   size: number;
 };
-const fileData: File[] = [
-  {
-    fileName: 'randomfile.txt',
-    fullPath: './randomfile.txt',
-    dateCreated: new Date(),
-    permissions: '0777',
-    fileType: { commonType: 'Text file', extension: '.txt' },
-    size: 10,
-    isDirectory: false,
-  },
-];
+const fileData: File[] = [];
 
 @Component({
   selector: 'app-root',
@@ -50,45 +40,54 @@ export class AppComponent {
   directory = "none";
 
   constructor(private appService: AppService) {
+    this.directory = "/Users/mjadendorff/Desktop";
+    this.checkStatus();
+    this.doDirectoryIndex();
+    setInterval(() => {
+      this.checkStatus();
+      this.doDirectoryIndex();
+    }, 10000)
+  }
+
+  checkStatus() {
     this.appService.getStatus().subscribe((data: any) => {
       this.status = data.status;
       if (this.status === 'online') {
         this.statusColor = 'lightgreen';
+      } else {
+        this.statusColor = 'red';
       }
     });
-    this.appService.getDirectoryListing('/Users/mjadendorff/Desktop').subscribe((data: any) => {
+  }
+
+  doDirectoryIndex() {
+    this.appService.getDirectoryListing(this.directory).subscribe((data: any) => {
       this.files = data;
-      this.directory = "/Users/mjadendorff/Desktop";
+      this.directory = this.directory;
     });
   }
 
   setHome() {
-    this.appService.getDirectoryListing("/Users/mjadendorff").subscribe((data: any) => {
-      this.files = data;
-      this.backwardStack.push(this.directory);
-      this.directory = "/Users/mjadendorff";
-    });
+    this.directory = "/Users/mjadendorff";
+    this.backwardStack.push(this.directory);
+    this.doDirectoryIndex();
   }
 
   goBack() {
     let newDir = this.backwardStack.pop();
     if (newDir != undefined) {
-      this.appService.getDirectoryListing(newDir).subscribe((data: any) => {
-        this.files = data;
-        this.forwardStack.push(this.directory);
-        this.directory = newDir ? newDir : "/";
-      });
+      this.forwardStack.push(this.directory);
+      this.directory = newDir ? newDir : "/";
+      this.doDirectoryIndex();
     }
   }
 
   goForward() { 
     let newDir = this.forwardStack.pop();
     if (newDir != undefined) {
-      this.appService.getDirectoryListing(newDir).subscribe((data: any) => {
-        this.files = data;
-        this.backwardStack.push(this.directory);
-        this.directory = newDir ? newDir : "/";
-      });
+      this.backwardStack.push(this.directory);
+      this.directory = newDir ? newDir : "/";
+      this.doDirectoryIndex();
     }
   }
 
@@ -96,24 +95,21 @@ export class AppComponent {
     let reg = /\/[a-zA-Z0-9."\s\\\-\_]+$/g
     let matches = this.directory.match(reg);
     if (matches && matches[0]) {
-      if (matches[0].length == this.directory.length) {
-        // Highest
-      } else {
-        let newDir = this.directory.replace(reg, "");
-        this.appService.getDirectoryListing(newDir).subscribe((data: any) => {
-          this.files = data;
-          this.backwardStack.push(this.directory);
-          this.directory = newDir;
-        });
+      if (matches[0].length != this.directory.length) {
+        this.backwardStack.push(this.directory);
+        this.directory = this.directory.replace(reg, "");
+        this.doDirectoryIndex(); 
       }
     }
   }
 
   seek(file: File) {
     if (file.isDirectory) {
-      this.changeDirectoryListing(file.fullPath);
+      this.backwardStack.push(this.directory);
+      this.directory = file.fullPath;
+      this.doDirectoryIndex();
     } else {
-      alert("file to be opened?");
+      // files
     }
   }
 
