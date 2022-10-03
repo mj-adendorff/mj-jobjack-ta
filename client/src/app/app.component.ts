@@ -53,7 +53,7 @@ export class AppComponent {
   directory = "none";
 
   constructor(private appService: AppService) {
-    this.directory = "/Users/mjadendorff/Desktop";
+    this.directory = "/Users/mjadendorff";
     this.checkStatus();
     this.doDirectoryIndex();
     setInterval(() => {
@@ -123,9 +123,19 @@ export class AppComponent {
 
   seek(file: File) {
     if (file.isDirectory) {
-      this.backwardStack.push(this.directory);
-      this.directory = file.fullPath;
-      this.doDirectoryIndex();
+      this.appService.getDirectoryListing(file.fullPath).subscribe({
+        next: (data: any) => {
+          this.files = data;
+          this.tempFiles = data;
+          this.backwardStack.push(this.directory);
+          this.directory = file.fullPath;
+        },
+        error: (_error: HttpErrorResponse) => {
+          alert(
+            "ERROR opening that directory. Do you have the correct access permissions?"
+          );
+        },
+      });
     } else {
       // files
     }
@@ -147,6 +157,7 @@ export class AppComponent {
           alert(
             "ERROR opening directory, does it exist and is not restricted?"
           );
+          this.directory = this.directory;
         },
       });
     }
@@ -161,8 +172,8 @@ export class AppComponent {
 
   filterData(event: Event) {
     this.files = this.tempFiles.filter((file) => {
-      return file.fileName.startsWith(
-        (event.target as HTMLTextAreaElement).value
+      return file.fileName.toLowerCase().includes(
+        (event.target as HTMLTextAreaElement).value.toLowerCase()
       );
     });
   }

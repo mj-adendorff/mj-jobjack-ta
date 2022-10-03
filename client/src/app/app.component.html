@@ -10,7 +10,14 @@
         <fa-icon class="button" (click)="goForward()" [icon]="faArrowRight"></fa-icon>
       </div>
       <div class="other">
-        <div>Current Directory: <span style="color: yellow">{{directory}}</span></div>
+        <div>
+          Current Directory: 
+          <input class="directory-input" (change)="findDirectory($event)" type="text" value={{directory}}/>
+        </div>
+        <div class="input-container">
+          <fa-icon class="button" [icon]="faFilter"></fa-icon>
+          <input (input)="filterData($event)" type="text"/>
+        </div>
         <div>API Status: 
           <span [ngClass]="{'success': status === 'online', 'error': status !== 'online' }">
             {{ status.toUpperCase() }}
@@ -19,16 +26,6 @@
       </div>
     </div>
     <!--Row with input-->
-    <div class="row">
-      <div class="input-container">
-        <fa-icon class="button" [icon]="faMagnifyingGlass"></fa-icon>
-        <input (change)="findDirectory($event)" type="text"/>
-      </div>
-      <div class="input-container">
-        <fa-icon class="button" [icon]="faFilter"></fa-icon>
-        <input (input)="filterData($event)" type="text"/>
-      </div>
-    </div>
   </div>
   <!--Table-->
   <div class="table-container">
@@ -37,11 +34,13 @@
         <tr>
           <th scope="col"></th>
           <th scope="col">File Name</th>
-          <th scope="col">File Date</th>
-          <th scope="col">File Perms</th>
-          <th scope="col">File Type</th>
+          <th class="optional" scope="col">File Date</th>
+          <th class="optional" scope="col">File Perms</th>
+          <th class="optional" scope="col">File Extension</th>
+          <th class="optional" scope="col">File Type</th>
+          <th class="mobile" scope="col">Details</th> 
           <th scope="col">File Size</th>
-          <th scope="col">File Path</th> 
+          <th class="optional" scope="col">File Path</th> 
         </tr>
       </thead>
       <tbody>
@@ -50,11 +49,13 @@
             <fa-icon [ngClass]="{'directory': file.isDirectory, 'file': !file.isDirectory}" [icon]="getIcon(file)"></fa-icon>
           </td>
           <th scope="row">{{ file.fileName }}</th>
-          <td>{{ file.dateCreated | date }}</td>
-          <td>{{ file.permissions }}</td>
-          <td>{{ file.fileType.commonType }}</td>
+          <td class="optional">{{ file.dateCreated | date }}</td>
+          <td class="optional">{{ file.permissions }}</td>
+          <td class="optional">{{ file.fileType.extension }}</td>
+          <td class="optional">{{ file.fileType.commonType }}</td>
+          <td class="mobile"><strong>Perms: </strong>{{file.permissions}}<br>File Type: {{file.fileType.commonType}}<br>Date Created: {{file.dateCreated | date}}</td>
           <td>{{ file.size | number }} KB</td>
-          <td>{{ file.fullPath }}</td>
+          <td class="optional">{{ file.fullPath }}</td>
         </tr>
       </tbody>
     </table>

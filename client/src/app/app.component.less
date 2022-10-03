@@ -21,11 +21,24 @@
   color: lightgray;
 }
 
+.input() {
+    width: auto;
+    background-color: #212429;
+    color: white;
+    border: 1px solid lightgray;
+    padding: 2px;
+    &:focus {
+      outline: none;
+      border: 2px solid lightgray;
+      padding: 1px;
+  }
+}
+
 .main {
   min-height: 100vh;
   width: 100%;
   @media @desktop {
-    min-width: 1000px;
+    min-width: 1200px;
   }
   @media @tablet {
     min-width: 900px;
@@ -52,27 +65,32 @@
     .row {
       display: flex;
       justify-content: space-between;
+      @media @mobile {
+        flex-direction: column;
+        justify-content: center;
+      }
+      flex-wrap: wrap;
       width: 100%;
       .input-container {
+        display: flex;
+        align-items: center;
         width: auto;
-        input {
-          width: auto;
-          background-color: #212429;
-          color: white;
-          border: 0px solid lightgray;
-          border-bottom: 1px solid white;
-          padding: 2px;
-          &:focus {
-            border: 0px solid lightgray;
-            border-bottom: 2px solid white;
-          }
-        }
-
+      }
+      input {
+        .input();
+        color: yellow;
+        margin-left: 5px;
+        margin-right: 5px;
       }
       .other {
         display: flex;
-        gap: 5px;
+        gap: 10px;
         width: auto;
+        @media @mobile {
+          flex-direction: column;
+          justify-content: center;
+          align-items: flex-end;
+        }
       }
       .bar {
         display: flex;
@@ -83,6 +101,7 @@
           &:hover {
             transform: scale(1.2);
             transition: 0.1s;
+            cursor: pointer;
           }
         }
         .button {
@@ -91,6 +110,7 @@
             color: yellow;
             transform: scale(1.2);
             transition: 0.1s;
+            cursor: pointer;
           }
         }
       }
@@ -107,9 +127,24 @@
       position: sticky;
       top: 0%;
     }
+    table tbody tr {
+      cursor: pointer;
+    }
     table {
       width: 100%;
-      min-width: 1000px;
+      .optional {
+        @media @mobile {
+          display: none;
+        }
+      }
+      .mobile {
+        @media @desktop {
+        display: none;
+        }
+        @media @tablet {
+          display: none;
+        }
+      }
     }
   }
 }
