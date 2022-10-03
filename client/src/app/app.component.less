@@ -13,6 +13,14 @@
   color: lightgreen;
 }
 
+.directory {
+  color: yellow;
+}
+
+.file {
+  color: lightgray;
+}
+
 .main {
   min-height: 100vh;
   width: 100%;
@@ -22,6 +30,9 @@
   @media @tablet {
     min-width: 900px;
   }
+  @media @mobile {
+    min-width: 400px;
+  }
   color: white;
   display: flex;
   justify-content: center;
@@ -30,33 +41,57 @@
   .info-container {
     display: flex;
     width: 100%;
-    justify-content: space-between;
+    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    border: 1.4px solid white;
+    border: 1.4px solid lightgreen;
+    margin-bottom: 5px;
     border-radius: 5px;
     padding: 5px;
-    .other {
+    gap: 10px;
+    .row {
       display: flex;
-      gap: 5px;
-      margin-right: 20px;
-    }
-    .bar {
-      display: flex;
-      gap: 20px;
-      margin-left: 20px;
-      .home-button {
-        color: yellow;
-        &:hover {
-          transform: scale(1.2);
-          transition: 0.1s;
+      justify-content: space-between;
+      width: 100%;
+      .input-container {
+        width: auto;
+        input {
+          width: auto;
+          background-color: #212429;
+          color: white;
+          border: 0px solid lightgray;
+          border-bottom: 1px solid white;
+          padding: 2px;
+          &:focus {
+            border: 0px solid lightgray;
+            border-bottom: 2px solid white;
+          }
         }
+
       }
-      .button {
-        color: white;
-        &:hover {
+      .other {
+        display: flex;
+        gap: 5px;
+        width: auto;
+      }
+      .bar {
+        display: flex;
+        gap: 20px;
+        width: auto;
+        .home-button {
           color: yellow;
-          transform: scale(1.2);
-          transition: 0.1s;
+          &:hover {
+            transform: scale(1.2);
+            transition: 0.1s;
+          }
+        }
+        .button {
+          color: white;
+          &:hover {
+            color: yellow;
+            transform: scale(1.2);
+            transition: 0.1s;
+          }
         }
       }
     }
@@ -64,7 +99,6 @@
   .table-container {
     width: 100%;
     max-height: 75vh;
-    min-width: 500px;
     padding: 2px;
     border: 1.4px solid white;
     border-radius: 5px;

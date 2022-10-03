@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, ViewChild, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { AppService } from './app.service';
 import { faFileLines as faFile, faFolderClosed as faFolder } from '@fortawesome/free-solid-svg-icons';
-import { faHouse, faUpLong, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faHouse, faUpLong, faArrowLeft, faArrowRight, faMagnifyingGlass, faFilter } from '@fortawesome/free-solid-svg-icons';
 
 type Extension = {
   extension: string;
@@ -32,9 +32,12 @@ export class AppComponent {
   faUpLong = faUpLong;
   faArrowLeft = faArrowLeft;
   faArrowRight = faArrowRight;
+  faMagnifyingGlass = faMagnifyingGlass;
+  faFilter = faFilter;
   forwardStack : string[] = [];
   backwardStack : string[] = [];
   files: File[] = fileData;
+  tempFiles: File[];
   status = 'offline';
   statusColor = 'red';
   directory = "none";
@@ -45,7 +48,9 @@ export class AppComponent {
     this.doDirectoryIndex();
     setInterval(() => {
       this.checkStatus();
-      this.doDirectoryIndex();
+      if (this.files == this.tempFiles) {
+        this.doDirectoryIndex();
+      }
     }, 10000)
   }
 
@@ -63,6 +68,7 @@ export class AppComponent {
   doDirectoryIndex() {
     this.appService.getDirectoryListing(this.directory).subscribe((data: any) => {
       this.files = data;
+      this.tempFiles = data;
       this.directory = this.directory;
     });
   }
@@ -126,5 +132,11 @@ export class AppComponent {
       this.backwardStack.push(this.directory);
       this.directory = directory;
     });
+  }
+
+  filterData(event: Event) {
+    this.files = this.tempFiles.filter((file) => {
+      return file.fileName.startsWith((event.target as HTMLTextAreaElement).value);
+    }) 
   }
 }

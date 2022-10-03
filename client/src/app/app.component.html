@@ -1,18 +1,32 @@
 <div class="main">
   <!--Forms and Info-->
   <div class="info-container">
-    <div class="bar">
-      <fa-icon class="home-button" (click)="setHome()" [icon]="faHouse"></fa-icon>
-      <fa-icon class="button" (click)="upDirectory()" [icon]="faUpLong"></fa-icon>
-      <fa-icon class="button" (click)="goBack()" [icon]="faArrowLeft"></fa-icon>
-      <fa-icon class="button" (click)="goForward()" [icon]="faArrowRight"></fa-icon>
+    <!--Top row with icons and info-->
+    <div class="row">
+      <div class="bar">
+        <fa-icon class="home-button" (click)="setHome()" [icon]="faHouse"></fa-icon>
+        <fa-icon class="button" (click)="upDirectory()" [icon]="faUpLong"></fa-icon>
+        <fa-icon class="button" (click)="goBack()" [icon]="faArrowLeft"></fa-icon>
+        <fa-icon class="button" (click)="goForward()" [icon]="faArrowRight"></fa-icon>
+      </div>
+      <div class="other">
+        <div>Current Directory: <span style="color: yellow">{{directory}}</span></div>
+        <div>API Status: 
+          <span [ngClass]="{'success': status === 'online', 'error': status !== 'online' }">
+            {{ status.toUpperCase() }}
+          </span>
+        </div>
+      </div>
     </div>
-    <div class="other">
-      <div>Current Directory: <span style="color: yellow">{{directory}}</span></div>
-      <div>API Status: 
-        <span [ngClass]="{'success': status === 'online', 'error': status !== 'online' }">
-          {{ status.toUpperCase() }}
-        </span>
+    <!--Row with input-->
+    <div class="row">
+      <div class="input-container">
+        <fa-icon class="button" [icon]="faMagnifyingGlass"></fa-icon>
+        <input type="text"/>
+      </div>
+      <div class="input-container">
+        <fa-icon class="button" [icon]="faFilter"></fa-icon>
+        <input (input)="filterData($event)" type="text"/>
       </div>
     </div>
   </div>
@@ -33,7 +47,7 @@
       <tbody>
         <tr *ngFor="let file of files" (click)="seek(file)">
           <td>
-            <fa-icon style="color: yellow" [icon]="getIcon(file)"></fa-icon>
+            <fa-icon [ngClass]="{'directory': file.isDirectory, 'file': !file.isDirectory}" [icon]="getIcon(file)"></fa-icon>
           </td>
           <th scope="row">{{ file.fileName }}</th>
           <td>{{ file.dateCreated | date }}</td>
