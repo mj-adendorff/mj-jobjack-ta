@@ -2,10 +2,10 @@
   <!--Forms and Info-->
   <div class="info-container">
     <div class="bar">
-      <fa-icon [icon]="faHouse"></fa-icon>
-      <fa-icon [icon]="faUpLong"></fa-icon>
-      <fa-icon [icon]="faArrowLeft"></fa-icon>
-      <fa-icon [icon]="faArrowRight"></fa-icon>
+      <fa-icon class="home-button" (click)="setHome()" [icon]="faHouse"></fa-icon>
+      <fa-icon class="button" (click)="upDirectory()" [icon]="faUpLong"></fa-icon>
+      <fa-icon class="button" (click)="goBack()" [icon]="faArrowLeft"></fa-icon>
+      <fa-icon class="button" (click)="goForward()" [icon]="faArrowRight"></fa-icon>
     </div>
     <div class="other">
       <p>Current Directory: <span style="color: yellow">{{directory}}</span></p>

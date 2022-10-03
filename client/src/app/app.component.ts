@@ -42,6 +42,8 @@ export class AppComponent {
   faUpLong = faUpLong;
   faArrowLeft = faArrowLeft;
   faArrowRight = faArrowRight;
+  forwardStack : string[] = [];
+  backwardStack : string[] = [];
   files: File[] = fileData;
   status = 'offline';
   statusColor = 'red';
@@ -58,6 +60,53 @@ export class AppComponent {
       this.files = data;
       this.directory = "/Users/mjadendorff/Desktop";
     });
+  }
+
+  setHome() {
+    this.appService.getDirectoryListing("/Users/mjadendorff").subscribe((data: any) => {
+      this.files = data;
+      this.backwardStack.push(this.directory);
+      this.directory = "/Users/mjadendorff";
+    });
+  }
+
+  goBack() {
+    let newDir = this.backwardStack.pop();
+    if (newDir != undefined) {
+      this.appService.getDirectoryListing(newDir).subscribe((data: any) => {
+        this.files = data;
+        this.forwardStack.push(this.directory);
+        this.directory = newDir ? newDir : "/";
+      });
+    }
+  }
+
+  goForward() { 
+    let newDir = this.forwardStack.pop();
+    if (newDir != undefined) {
+      this.appService.getDirectoryListing(newDir).subscribe((data: any) => {
+        this.files = data;
+        this.backwardStack.push(this.directory);
+        this.directory = newDir ? newDir : "/";
+      });
+    }
+  }
+
+  upDirectory() {
+    let reg = /\/[a-zA-Z0-9."\s\\\-\_]+$/g
+    let matches = this.directory.match(reg);
+    if (matches && matches[0]) {
+      if (matches[0].length == this.directory.length) {
+        // Highest
+      } else {
+        let newDir = this.directory.replace(reg, "");
+        this.appService.getDirectoryListing(newDir).subscribe((data: any) => {
+          this.files = data;
+          this.backwardStack.push(this.directory);
+          this.directory = newDir;
+        });
+      }
+    }
   }
 
   seek(file: File) {
@@ -78,6 +127,7 @@ export class AppComponent {
   changeDirectoryListing(directory: string) {
     this.appService.getDirectoryListing(directory).subscribe((data: any) => {
       this.files = data;
+      this.backwardStack.push(this.directory);
       this.directory = directory;
     });
   }
