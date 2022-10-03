@@ -1,7 +1,18 @@
-import { Component } from '@angular/core';
-import { AppService } from './app.service';
-import { faFileLines as faFile, faFolderClosed as faFolder } from '@fortawesome/free-solid-svg-icons';
-import { faHouse, faUpLong, faArrowLeft, faArrowRight, faMagnifyingGlass, faFilter } from '@fortawesome/free-solid-svg-icons';
+import { Component } from "@angular/core";
+import { AppService } from "./app.service";
+import {
+  faFileLines as faFile,
+  faFolderClosed as faFolder,
+} from "@fortawesome/free-solid-svg-icons";
+import {
+  faHouse,
+  faUpLong,
+  faArrowLeft,
+  faArrowRight,
+  faMagnifyingGlass,
+  faFilter,
+} from "@fortawesome/free-solid-svg-icons";
+import { HttpErrorResponse } from "@angular/common/http";
 
 type Extension = {
   extension: string;
@@ -20,12 +31,11 @@ type File = {
 const fileData: File[] = [];
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.less'],
+  selector: "app-root",
+  templateUrl: "./app.component.html",
+  styleUrls: ["./app.component.less"],
 })
 export class AppComponent {
-
   faFile = faFile;
   faFolder = faFolder;
   faHouse = faHouse;
@@ -34,12 +44,12 @@ export class AppComponent {
   faArrowRight = faArrowRight;
   faMagnifyingGlass = faMagnifyingGlass;
   faFilter = faFilter;
-  forwardStack : string[] = [];
-  backwardStack : string[] = [];
+  forwardStack: string[] = [];
+  backwardStack: string[] = [];
   files: File[] = fileData;
   tempFiles: File[];
-  status = 'offline';
-  statusColor = 'red';
+  status = "offline";
+  statusColor = "red";
   directory = "none";
 
   constructor(private appService: AppService) {
@@ -51,26 +61,28 @@ export class AppComponent {
       if (this.files == this.tempFiles) {
         this.doDirectoryIndex();
       }
-    }, 10000)
+    }, 10000);
   }
 
   checkStatus() {
     this.appService.getStatus().subscribe((data: any) => {
       this.status = data.status;
-      if (this.status === 'online') {
-        this.statusColor = 'lightgreen';
+      if (this.status === "online") {
+        this.statusColor = "lightgreen";
       } else {
-        this.statusColor = 'red';
+        this.statusColor = "red";
       }
     });
   }
 
   doDirectoryIndex() {
-    this.appService.getDirectoryListing(this.directory).subscribe((data: any) => {
-      this.files = data;
-      this.tempFiles = data;
-      this.directory = this.directory;
-    });
+    this.appService
+      .getDirectoryListing(this.directory)
+      .subscribe((data: any) => {
+        this.files = data;
+        this.tempFiles = data;
+        this.directory = this.directory;
+      });
   }
 
   setHome() {
@@ -88,7 +100,7 @@ export class AppComponent {
     }
   }
 
-  goForward() { 
+  goForward() {
     let newDir = this.forwardStack.pop();
     if (newDir != undefined) {
       this.backwardStack.push(this.directory);
@@ -98,13 +110,13 @@ export class AppComponent {
   }
 
   upDirectory() {
-    let reg = /\/[a-zA-Z0-9."\s\\\-\_]+$/g
+    let reg = /\/[a-zA-Z0-9."\s\\\-\_]+$/g;
     let matches = this.directory.match(reg);
     if (matches && matches[0]) {
       if (matches[0].length != this.directory.length) {
         this.backwardStack.push(this.directory);
         this.directory = this.directory.replace(reg, "");
-        this.doDirectoryIndex(); 
+        this.doDirectoryIndex();
       }
     }
   }
@@ -119,6 +131,27 @@ export class AppComponent {
     }
   }
 
+  findDirectory(event: Event) {
+    let DIR = (event.target as HTMLTextAreaElement).value;
+    if (DIR == "") {
+      this.setHome();
+    } else {
+      this.appService.getDirectoryListing(DIR).subscribe({
+        next: (data: any) => {
+          this.files = data;
+          this.tempFiles = data;
+          this.backwardStack.push(this.directory);
+          this.directory = DIR;
+        },
+        error: (_error: HttpErrorResponse) => {
+          alert(
+            "ERROR opening directory, does it exist and is not restricted?"
+          );
+        },
+      });
+    }
+  }
+
   getIcon(file: File) {
     if (file.isDirectory) {
       return this.faFolder;
@@ -126,17 +159,11 @@ export class AppComponent {
     return this.faFile;
   }
 
-  changeDirectoryListing(directory: string) {
-    this.appService.getDirectoryListing(directory).subscribe((data: any) => {
-      this.files = data;
-      this.backwardStack.push(this.directory);
-      this.directory = directory;
-    });
-  }
-
   filterData(event: Event) {
     this.files = this.tempFiles.filter((file) => {
-      return file.fileName.startsWith((event.target as HTMLTextAreaElement).value);
-    }) 
+      return file.fileName.startsWith(
+        (event.target as HTMLTextAreaElement).value
+      );
+    });
   }
 }

@@ -22,7 +22,7 @@
     <div class="row">
       <div class="input-container">
         <fa-icon class="button" [icon]="faMagnifyingGlass"></fa-icon>
-        <input type="text"/>
+        <input (change)="findDirectory($event)" type="text"/>
       </div>
       <div class="input-container">
         <fa-icon class="button" [icon]="faFilter"></fa-icon>

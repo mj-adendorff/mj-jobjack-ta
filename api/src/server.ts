@@ -58,6 +58,7 @@ app.listen(PORT, HOST, () => {
 /**
  * * GET request
  * Query if the API is online
+ * Somewhat redundant, but here for consitency
  */
 app.get("/status", (_req, res) => {
 	res.status(200).json({ status: "online" });
