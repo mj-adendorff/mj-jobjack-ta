@@ -75,6 +75,18 @@ export class AppComponent {
     });
   }
 
+  updateBackwardStack(newItem: string) {
+    if (this.backwardStack[this.backwardStack.length - 1] !== newItem) {
+      this.backwardStack.push(newItem);
+    }
+  }
+
+  updateForwardStack(newItem: string) {
+    if (this.forwardStack[this.forwardStack.length - 1] !== newItem) {
+      this.forwardStack.push(newItem);
+    }
+  }
+
   doDirectoryIndex() {
     this.appService
       .getDirectoryListing(this.directory)
@@ -86,15 +98,15 @@ export class AppComponent {
   }
 
   setHome() {
+    this.updateBackwardStack(this.directory);
     this.directory = "/Users/mjadendorff";
-    this.backwardStack.push(this.directory);
     this.doDirectoryIndex();
   }
 
   goBack() {
     let newDir = this.backwardStack.pop();
     if (newDir != undefined) {
-      this.forwardStack.push(this.directory);
+      this.updateForwardStack(this.directory);
       this.directory = newDir ? newDir : "/";
       this.doDirectoryIndex();
     }
@@ -103,7 +115,7 @@ export class AppComponent {
   goForward() {
     let newDir = this.forwardStack.pop();
     if (newDir != undefined) {
-      this.backwardStack.push(this.directory);
+      this.updateBackwardStack(this.directory);
       this.directory = newDir ? newDir : "/";
       this.doDirectoryIndex();
     }
@@ -114,7 +126,7 @@ export class AppComponent {
     let matches = this.directory.match(reg);
     if (matches && matches[0]) {
       if (matches[0].length != this.directory.length) {
-        this.backwardStack.push(this.directory);
+        this.updateBackwardStack(this.directory);
         this.directory = this.directory.replace(reg, "");
         this.doDirectoryIndex();
       }
@@ -127,7 +139,7 @@ export class AppComponent {
         next: (data: any) => {
           this.files = data;
           this.tempFiles = data;
-          this.backwardStack.push(this.directory);
+          this.updateBackwardStack(this.directory);
           this.directory = file.fullPath;
         },
         error: (_error: HttpErrorResponse) => {
@@ -150,7 +162,7 @@ export class AppComponent {
         next: (data: any) => {
           this.files = data;
           this.tempFiles = data;
-          this.backwardStack.push(this.directory);
+          this.updateBackwardStack(this.directory);
           this.directory = DIR;
         },
         error: (_error: HttpErrorResponse) => {
