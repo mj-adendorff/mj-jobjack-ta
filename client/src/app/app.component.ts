@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ViewChild, OnDestroy } from '@angular/core';
 import { AppService } from './app.service';
 import { faFileLines as faFile, faFolderClosed as faFolder } from '@fortawesome/free-solid-svg-icons';
+import { faHouse, faUpLong, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
 type Extension = {
   extension: string;
@@ -34,15 +35,18 @@ const fileData: File[] = [
   styleUrls: ['./app.component.less'],
 })
 export class AppComponent {
+
   faFile = faFile;
   faFolder = faFolder;
+  faHouse = faHouse;
+  faUpLong = faUpLong;
+  faArrowLeft = faArrowLeft;
+  faArrowRight = faArrowRight;
   files: File[] = fileData;
   status = 'offline';
   statusColor = 'red';
   directory = "none";
-  test(name: string) {
-    console.log(name);
-  }
+
   constructor(private appService: AppService) {
     this.appService.getStatus().subscribe((data: any) => {
       this.status = data.status;

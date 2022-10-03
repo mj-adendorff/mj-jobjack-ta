@@ -1,8 +1,16 @@
 <div class="main">
   <!--Forms and Info-->
   <div class="info-container">
-      <p>API Status: <span style="color: {{ statusColor }}">{{ status }}</span></p>
+    <div class="bar">
+      <fa-icon [icon]="faHouse"></fa-icon>
+      <fa-icon [icon]="faUpLong"></fa-icon>
+      <fa-icon [icon]="faArrowLeft"></fa-icon>
+      <fa-icon [icon]="faArrowRight"></fa-icon>
+    </div>
+    <div class="other">
       <p>Current Directory: <span style="color: yellow">{{directory}}</span></p>
+      <p>API Status: <span style="color: {{ statusColor }}">{{ status.toUpperCase() }}</span></p>
+    </div>
   </div>
   <!--Table-->
   <div class="table-container">
