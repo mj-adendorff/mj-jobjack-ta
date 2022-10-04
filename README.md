@@ -80,6 +80,8 @@ docker run -d -p 5200:5200 -p 4200:4200 mj-jobjack-ta
 The NodeJS API requires a UNIX system to function properly,
 it can be run seperately as a docker container or locally on its own.
 
+![API via Insomnia](https://imgur.com/LyT6Des.jpg)
+
 #### Building and running locally
 ```bash
 cd api
@@ -107,6 +109,9 @@ docker run -d -p 5200:5200 mjadendorff/mj-jobjack-ta-api
 
 The Angular client can also be run as a seperate container or locally.
 Because this is a technical assesment, it will run in developer mode.
+
+![Client](https://imgur.com/np2ID9h.jpg)
+<img src="https://imgur.com/7wxV61J.jpg" width="500px">
 
 #### Running the client locally
 ```bash
