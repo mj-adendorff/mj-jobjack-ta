@@ -184,6 +184,10 @@ export class AppComponent {
         this.updateBackwardStack(this.directory);
         this.directory = this.directory.replace(reg, "");
         this.doDirectoryIndex();
+      } else {
+        this.updateBackwardStack(this.directory);
+        this.directory = "/";
+        this.doDirectoryIndex();
       }
     }
   }

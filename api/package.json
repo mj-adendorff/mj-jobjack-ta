@@ -4,8 +4,8 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"build": "npx tsc",
-		"start": "npx tsc && node build/server.js",
+		"build": "tsc",
+		"start": "tsc && node build/server.js",
 		"dev": "node build/server.js",
 		"test": "echo \"\n!!\tAPI MUST BE RUNNING\t!!\n\" && jest build/"
 	},

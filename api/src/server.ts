@@ -13,7 +13,7 @@
 
 /* Constants */
 const PORT: number = 5200;
-const HOST: string = "localhost";
+const HOST: string = "0.0.0.0";
 
 /* Globals */
 import cors from "cors";
