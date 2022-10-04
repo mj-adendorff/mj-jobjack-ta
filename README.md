@@ -60,6 +60,8 @@ There are three ways to run this project;
 ## To Run the Entire Project as a Container
 
 You can either pull the image from Dockerhub (easiest), or build the image and run it locally.
+Also the project was done on an M1 macbook and tested on an Raspberry PI, 
+it's possible that some things might not work or have performance issues when running on x86 platform.
 
 #### From Dockerhub
 ```bash
