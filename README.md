@@ -61,6 +61,8 @@ There are three ways to run this project;
 ## To Run the Entire Project as a Container
 
 You can either pull the image from Dockerhub (easiest), or build the image and run it locally.
+After running the image, give it a few seconds to build and run the api and client.
+You can then visit the application (on the same device) at "http://localhost:4200/"
 
 #### From Dockerhub
 ```bash
