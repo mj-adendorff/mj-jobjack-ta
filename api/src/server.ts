@@ -21,6 +21,7 @@ import express from "express";
 import fs from "node:fs";
 import path from "node:path";
 import { commonFileTypes } from "./data.json";
+import os from "os";
 
 /* API services */
 const app = express();
@@ -61,7 +62,7 @@ app.listen(PORT, HOST, () => {
  * Somewhat redundant, but here for consitency
  */
 app.get("/status", (_req, res) => {
-	res.status(200).json({ status: "online" });
+	res.status(200).json({ status: "online", home: os.homedir()});
 });
 
 /**
@@ -95,7 +96,7 @@ app.post("/stream", (req, res) => {
 				let stats = fs.statSync(filePath);
 				let newFile: File = {
 					fileName: file,
-					fullPath: filePath,
+					fullPath: path.resolve(filePath),
 					dateCreated: stats.birthtime,
 					permissions: getPermissions(stats.mode),
 					isDirectory: stats.isDirectory(),
