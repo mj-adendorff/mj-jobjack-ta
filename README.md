@@ -26,7 +26,8 @@ My technical assesment for JobJack. The date of the assesment ran between 29/30 
 ## Notice
 
 Since this is a technical assesment, both the API and Client has to be running on the same system.
-This can be changed, however it is not required.
+This can be changed, however it is not required. Also the project was done on an M1 macbook and tested on an Raspberry PI, 
+it's possible that some things might not work or have performance issues when running on x86 platform.
 
 ## Repo Directory Structure
 
@@ -60,8 +61,6 @@ There are three ways to run this project;
 ## To Run the Entire Project as a Container
 
 You can either pull the image from Dockerhub (easiest), or build the image and run it locally.
-Also the project was done on an M1 macbook and tested on an Raspberry PI, 
-it's possible that some things might not work or have performance issues when running on x86 platform.
 
 #### From Dockerhub
 ```bash
