@@ -1,0 +1,9 @@
+FROM node:16
+WORKDIR /app
+COPY package*.json ./
+RUN npm install\
+    && npm install typescript -g\
+    && npm install @angular/cli -g
+COPY . .
+EXPOSE 4200
+CMD ["ng", "serve", "--host", "0.0.0.0"]
