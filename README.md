@@ -111,7 +111,6 @@ The Angular client can also be run as a seperate container or locally.
 Because this is a technical assesment, it will run in developer mode.
 
 ![Client](https://imgur.com/np2ID9h.jpg)
-<img src="https://imgur.com/7wxV61J.jpg" width="500px">
 
 #### Running the client locally
 ```bash
