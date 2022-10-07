@@ -33,7 +33,7 @@ type File = {
   permissions: string;
   fileType: Extension;
   isDirectory: boolean;
-  size: number;
+  size: number | null;
 };
 const fileData: File[] = [];
 

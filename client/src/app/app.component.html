@@ -54,7 +54,10 @@
           <td class="optional">{{ file.fileType.extension }}</td>
           <td class="optional">{{ file.fileType.commonType }}</td>
           <td class="mobile"><strong>Perms: </strong>{{file.permissions}}<br>File Type: {{file.fileType.commonType}}<br>Date Created: {{file.dateCreated | date}}</td>
-          <td>{{ file.size | number }} KB</td>
+          
+          <div *ngIf="file.size; then thenBlock else elseBlock"></div>
+          <ng-template #thenBlock><td>{{ file.size | number }} KB</td></ng-template>
+          <ng-template #elseBlock><td></td></ng-template>
           <td class="optional">{{ file.fullPath }}</td>
         </tr>
       </tbody>

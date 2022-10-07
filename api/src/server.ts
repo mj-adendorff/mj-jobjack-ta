@@ -43,7 +43,7 @@ type File = {
 	permissions: string;
 	fileType: Extension;
 	isDirectory: boolean;
-	size: number;
+	size: number | null;
 };
 
 type Listing = Array<File>;
@@ -101,7 +101,7 @@ app.post("/stream", (req, res) => {
 					permissions: getPermissions(stats.mode),
 					isDirectory: stats.isDirectory(),
 					fileType: getExtension(file, stats.isDirectory()),
-					size: getKilobytesFromBytes(stats.size),
+					size: stats.isDirectory() ? null : getKilobytesFromBytes(stats.size),
 				};
 				// Strucutre JSON data
 				if (count != 0) {
