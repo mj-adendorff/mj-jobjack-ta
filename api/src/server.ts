@@ -110,6 +110,7 @@ app.post("/stream", (req, res) => {
 						}
 						count++;
 						res.status(200).write(JSON.stringify(newFile));
+						// End stream
 						if (count == files.length - 1) {
 							res.write("]");
 							res.status(200).end();
