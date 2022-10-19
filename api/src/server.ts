@@ -93,30 +93,37 @@ app.post("/stream", (req, res) => {
 			try {
 				// Query the file
 				let filePath = `${DIR}/${file}`;
-				let stats = fs.statSync(filePath);
-				let newFile: File = {
-					fileName: file,
-					fullPath: path.resolve(filePath),
-					dateCreated: stats.birthtime,
-					permissions: getPermissions(stats.mode),
-					isDirectory: stats.isDirectory(),
-					fileType: getExtension(file, stats.isDirectory()),
-					size: stats.isDirectory() ? null : getKilobytesFromBytes(stats.size),
-				};
-				// Strucutre JSON data
-				if (count != 0) {
-					res.write(",");
-				}
-				count++;
-				// send out to stream
-				res.status(200).write(JSON.stringify(newFile));
+				fs.stat(filePath, (error, stats : any) => {
+					if (!error) {
+						let newFile: File = {
+							fileName: file,
+							fullPath: path.resolve(filePath),
+							dateCreated: stats.birthtime,
+							permissions: getPermissions(stats.mode),
+							isDirectory: stats.isDirectory(),
+							fileType: getExtension(file, stats.isDirectory()),
+							size: stats.isDirectory() ? null : getKilobytesFromBytes(stats.size),
+						};
+						// Strucutre JSON data
+						if (count != 0) {
+							res.write(",");
+						}
+						count++;
+						res.status(200).write(JSON.stringify(newFile));
+						if (count == files.length - 1) {
+							res.write("]");
+							res.status(200).end();
+						}
+					}
+				});
 			} catch {
 				console.warn(`error reading file ${file}, ignoring...`);
+				count++;
 			}
 		});
 		// close the stream and JSON data structure
-		res.write("]");
-		res.status(200).end();
+		// res.write("]");
+		// res.status(200).end();
 	});
 });
 
